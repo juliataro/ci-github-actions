@@ -1,32 +1,21 @@
-name: Check-markdown-files
-on:
-  push:
+name: "File existence check"
+
+on: [push, pull_request]
+
 jobs:
-  Check-markdown-files:
-    runs-on: macos-10.15
+  file_existence:
+    runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
       - name: Check file existence
-      - uses: andstor/file-existence-action@v1
+        id: check_files
+        uses: andstor/file-existence-action@v1
         with:
-          files: "package.json, attack.js"
-       - name: File exists
-       if: steps.check_files.outputs.files_exists == 'true'
-       # Only runs if all of the files exists
-       run: echo All files exists!
-  run-if-failed:
-    runs-on: macos-10.15
-    needs: [ Check-markdown-files ]
-    if: always() && (needs.Check-markdown-files.result == 'failure')
-    steps:
-      # email sender
-      - name: Send mail
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{secrets.MAIL_USERNAME}}
-          password: ${{secrets.MAIL_PASSWORD}}
-          subject: Build job of ${{github.repository}} failed!
-          body: ${{ github.job }} job in workflow ${{ github.workflow }} of ${{ github.repository }} failed!
-          to: youremail
-          from: Github actions
+          files: "package.json, README.md"
+
+      - name: File exists
+        if: steps.check_files.outputs.files_exists == 'true'
+        # Only runs if all of the files exists
+        run: echo All files exists!

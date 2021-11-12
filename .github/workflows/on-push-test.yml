@@ -18,7 +18,7 @@ jobs:
       - name: File exists
         if: steps.check_files.outputs.files_exists == 'true'
         # Only runs if all of the files exists
-        run: echo All files exists!
+        run: echo All files exists, message comes to email!
 
   run-if-failed:
     runs-on: ubuntu-latest
@@ -35,5 +35,5 @@ jobs:
           password: ${{secrets.MAIL_PASSWORD}}
           subject: Build job of ${{github.repository}} failed!
           body: ${{ github.job }} job in workflow ${{ github.workflow }} of ${{ github.repository }} failed!
-          to: youremail
+          to: julia.taro@gmail.com
           from: Github actions

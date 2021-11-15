@@ -2,15 +2,22 @@ name: file-existence
 on:
   push:
 jobs:
-  file-existence:
-    name: Checkout code
+  file_existence:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout code
+        uses: actions/checkout@v1
+
       - name: Check file existence
+        id: check_files
         uses: andstor/file-existence-action@v1
         with:
-          files: "testtest.js"
+          files: "package.json, README.md"
+
+      - name: File exists
+        if: steps.check_files.outputs.files_exists == 'true'
+        # Only runs if all of the files exists
+        run: echo All files exists!
   run-if-failed:
     runs-on: ubuntu-latest
     needs: [ file-existence ]

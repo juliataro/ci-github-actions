@@ -13,6 +13,7 @@ jobs:
         uses: andstor/file-existence-action@v1
         with:
           files: "blabla.js"
+
   run-if-failed:
     runs-on: ubuntu-latest
     needs: [ file_existence ]
